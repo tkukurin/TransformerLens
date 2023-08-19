@@ -3,7 +3,7 @@ import time
 import pytest
 import torch
 
-from transformer_lens.HookedTransformer import HookedTransformer
+from transformer_lens.hooked_transformer import HookedTransformer
 from transformer_lens.utilities.devices import get_device_for_block_index
 
 

@@ -1,7 +1,7 @@
 import pytest
 
 from transformer_lens.evals import IOIDataset, ioi_eval
-from transformer_lens.HookedTransformer import HookedTransformer
+from transformer_lens.hooked_transformer import HookedTransformer
 
 
 @pytest.fixture(scope="module")

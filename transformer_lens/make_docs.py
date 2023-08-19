@@ -1,7 +1,7 @@
 # %%
 from functools import lru_cache
 
-from easy_transformer import loading
+import loading_from_pretrained as loading
 
 # %%
 # cfg = (loading.get_pretrained_model_config("solu-1l"))

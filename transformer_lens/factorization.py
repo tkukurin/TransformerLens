@@ -6,7 +6,7 @@ from typing import List, Tuple, Union
 import torch
 from jaxtyping import Float
 
-import transformer_lens.utils as utils
+from transformer_lens import utils
 
 
 class FactoredMatrix:

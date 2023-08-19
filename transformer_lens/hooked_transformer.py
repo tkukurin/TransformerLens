@@ -15,7 +15,7 @@ from typing_extensions import Literal
 import transformer_lens.loading_from_pretrained as loading
 import transformer_lens.utils as utils
 from transformer_lens import HookedTransformerConfig
-from transformer_lens.ActivationCache import ActivationCache
+from transformer_lens import ActivationCache
 from transformer_lens.components import (
     Embed,
     LayerNorm,
@@ -26,7 +26,7 @@ from transformer_lens.components import (
     TransformerBlock,
     Unembed,
 )
-from transformer_lens.FactoredMatrix import FactoredMatrix
+from transformer_lens import FactoredMatrix
 from transformer_lens.hook_points import HookedRootModule, HookPoint
 
 # Note - activation cache is used with run_with_cache, past_key_value_caching is used for generation.

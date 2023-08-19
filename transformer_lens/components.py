@@ -10,11 +10,11 @@ import torch.nn.functional as F
 from fancy_einsum import einsum
 from jaxtyping import Float, Int
 
-from transformer_lens.FactoredMatrix import FactoredMatrix
-from transformer_lens.hook_points import HookPoint
-from transformer_lens.HookedTransformerConfig import HookedTransformerConfig
-from transformer_lens.past_key_value_caching import HookedTransformerKeyValueCacheEntry
-from transformer_lens.utils import gelu_fast, gelu_new, solu
+from . import FactoredMatrix
+from .hook_points import HookPoint
+from .import HookedTransformerConfig
+from .import HookedTransformerKeyValueCacheEntry
+from .utils import gelu_fast, gelu_new, solu
 
 
 # Embed & Unembed

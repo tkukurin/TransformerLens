@@ -4,7 +4,7 @@ from typing import List, Union
 import torch
 from jaxtyping import Float
 
-from transformer_lens.HookedTransformerConfig import HookedTransformerConfig
+from transformer_lens.config import HookedTransformerConfig
 from transformer_lens.utilities.devices import get_device_for_block_index
 
 
