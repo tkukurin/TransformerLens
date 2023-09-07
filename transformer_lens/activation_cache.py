@@ -136,11 +136,19 @@ class ActivationCache:
     def toggle_autodiff(self, mode: bool = False):
         """
         Sets autodiff to mode (defaults to turning it off).
-        WARNING: This is pretty dangerous, since autodiff is global state - this turns off torch's ability to take gradients completely and it's easy to get a bunch of errors if you don't realise what you're doing.
+        WARNING: This is pretty dangerous, since autodiff is global state - this
+        turns off torch's ability to take gradients completely and it's easy to
+        get a bunch of errors if you don't realise what you're doing.
 
-        But autodiff consumes a LOT of GPU memory (since every intermediate activation is cached until all downstream activations are deleted - this means that computing the loss and storing it in a list will keep every activation sticking around!). So often when you're analysing a model's activations, and don't need to do any training, autodiff is more trouble than its worth.
+        But autodiff consumes a LOT of GPU memory (since every intermediate
+        activation is cached until all downstream activations are deleted - this
+        means that computing the loss and storing it in a list will keep every
+        activation sticking around!). So often when you're analysing a model's
+        activations, and don't need to do any training, autodiff is more trouble
+        than its worth.
 
-        If you don't want to mess with global state, using torch.inference_mode as a context manager or decorator achieves similar effects :)
+        If you don't want to mess with global state, using torch.inference_mode
+        as a context manager or decorator achieves similar effects :)
         """
         logging.warning(f"Changed the global state, set autodiff to {mode}")
         torch.set_grad_enabled(mode)
@@ -181,19 +189,37 @@ class ActivationCache:
         mlp_input: bool = False,
         return_labels: bool = False,
     ) -> Float[torch.Tensor, "layers_covered *batch_and_pos_dims d_model"]:
-        """Returns the accumulated residual stream up to a given layer, ie a stack of previous residual streams up to that layer's input. This can be thought of as a series of partial values of the residual stream, where the model gradually accumulates what it wants.
+        """Returns the accumulated residual stream up to a given layer.
+        
+        ie a stack of previous residual streams up to that layer's input. This
+        can be thought of as a series of partial values of the residual stream,
+        where the model gradually accumulates what it wants.
 
         Args:
-            layer (int, *optional*): The layer to take components up to - by default includes resid_pre for that layer and excludes resid_mid and resid_post for that layer. layer==n_layers, -1 or None means to return all residual streams, including the final one (ie immediately pre logits). The indices are taken such that this gives the accumulated streams up to the input to layer l
-            incl_mid (bool, optional): Whether to return resid_mid for all previous layers. Defaults to False.
-            mlp_input (bool, optional): Whether to include resid_mid for the current layer - essentially giving MLP input rather than Attn input. Defaults to False.
-            apply_ln (bool, optional): Whether to apply LayerNorm to the stack. Defaults to False.
-            pos_slice (Slice): A slice object to apply to the pos dimension. Defaults to None, do nothing.
-            return_labels (bool, optional): Whether to return a list of labels for the residual stream components. Useful for labelling graphs. Defaults to True.
+            layer (int, *optional*): The layer to take components up to - by
+            default includes resid_pre for that layer and excludes resid_mid and
+            resid_post for that layer. layer==n_layers, -1 or None means to
+            return all residual streams, including the final one (ie immediately
+            pre logits). The indices are taken such that this gives the
+            accumulated streams up to the input to layer l
+
+            incl_mid (bool, optional): Whether to return resid_mid for all
+            previous layers.
+
+            apply_ln (bool, optional): Whether to apply LayerNorm to the stack.
+
+            pos_slice (Slice): A slice object to apply to the pos dimension.
+
+            mlp_input (bool, optional): Whether to include resid_mid for the
+            current layer - essentially giving MLP input rather than Attn input.
+
+            return_labels (bool, optional): Whether to return a list of labels
+            for the residual stream components. Useful for labelling graphs.
 
         Returns:
-            Components: A [num_components, batch_size, pos, d_model] tensor of the accumulated residual streams.
-            (labels): An optional list of labels for the components.
+            Components [num_components, batch_size, pos, d_model]:
+                tensor of the accumulated residual streams.
+                (labels): An optional list of labels for the components.
         """
         if not isinstance(pos_slice, Slice):
             pos_slice = Slice(pos_slice)
@@ -249,10 +275,15 @@ class ActivationCache:
         batch_slice: Union[Slice, SliceInput] = None,
         has_batch_dim: bool = True,
     ) -> Float[torch.Tensor, "num_components *batch_and_pos_dims_out"]:
-        """Returns the logit attributions for the residual stack on an input of tokens, or the logit difference attributions for the residual stack if incorrect_tokens is provided.
+        """Returns the logit attributions.
+        
+        For the residual stack on an input of tokens, or the logit difference
+        attributions for the residual stack if incorrect_tokens is provided.
 
         Args:
-            residual_stack (Float[torch.Tensor, "num_components *batch_and_pos_dims d_model"]): stack of components of residual stream to get logit attributions for.
+            residual_stack (Float[torch.Tensor, "num_components
+            *batch_and_pos_dims d_model"]): stack of components of residual
+            stream to get logit attributions for.
             tokens (Union[str, int, Int[torch.Tensor, ""], Int[torch.Tensor, "batch"], Int[torch.Tensor, "batch position"]]): tokens to compute logit attributions on.
             incorrect_tokens (Union[str, int, Int[torch.Tensor, ""], Int[torch.Tensor, "batch"], Int[torch.Tensor, "batch position"]], optional): if provided, compute attributions on logit difference between tokens and incorrect_tokens.
                 Must have the same shape as tokens.

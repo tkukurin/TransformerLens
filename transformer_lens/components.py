@@ -12,8 +12,8 @@ from jaxtyping import Float, Int
 
 from . import FactoredMatrix
 from .hook_points import HookPoint
-from .import HookedTransformerConfig
-from .import HookedTransformerKeyValueCacheEntry
+from . import HookedTransformerConfig
+from . import HookedTransformerKeyValueCacheEntry
 from .utils import gelu_fast, gelu_new, solu
 
 
